@@ -53,14 +53,14 @@ class Crud{
         if(empty($id) || empty($modelo) || empty($marca) || empty($placa) || empty($cor) || empty($ano)){
             return false; 
         }
-        $query = "UPDATE". $this->table_name . " SET modelo = ?, marca = ?, placa = ?, cor = ?, ano = ? WERE id = ?";
+        $query = "UPDATE ". $this->table_name . " SET modelo = ?, marca = ?, placa = ?, cor = ?, ano = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $stmt->blindParam(1,$modelo);
-        $stmt->blindParam(2,$marca);
-        $stmt->blindParam(3,$placa);
-        $stmt->blindParam(4,$cor);
-        $stmt->blindParam(5,$ano);
-        $stmt->blindParam(6,$id);
+        $stmt->bindParam(1,$modelo);
+        $stmt->bindParam(2,$marca);
+        $stmt->bindParam(3,$placa);
+        $stmt->bindParam(4,$cor);
+        $stmt->bindParam(5,$ano);
+        $stmt->bindParam(6,$id);
         if($stmt->execute()){
             return true;
         }else{
@@ -76,5 +76,18 @@ class Crud{
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
+    public function delete($id){
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1,$id);
+        if($stmt->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
+
 ?>
